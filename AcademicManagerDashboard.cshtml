@@ -1,0 +1,37 @@
+@using CMCS.Models List<CMCS.Models.Claim>
+<h2>Claims List</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No claims available.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Claim ID</th> <!-- Updated -->
+                <th>Lecturer Name</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Total Claim</th>
+                <th>Notes</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.ClaimId</td> <!-- Updated -->
+                    <td>@claim.LecturerName</td>
+                    <td>@claim.HoursWorked</td>
+                    <td>@claim.HourlyRate</td>
+                    <td>@claim.TotalClaim</td>
+                    <td>@claim.Notes</td>
+                    <td>@claim.Status</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,47 @@
+﻿@model List<test.Models.Claim>
+
+<h2>My Claims</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No claims available for your account.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Total Claim</th>
+                <th>Notes</th>
+                <th>Status</th>
+                <th>Supporting Document</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.HoursWorked</td>
+                    <td>R @claim.HourlyRate</td>
+                    <td>R @claim.TotalClaim</td>
+                    <td>@claim.Notes</td>
+                    <td>@claim.Status</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.SupportingDocument))
+                        {
+                            <a href="@claim.SupportingDocument" target="_blank">View Document</a>
+                        }
+                        else
+                        {
+                            <span>No document</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

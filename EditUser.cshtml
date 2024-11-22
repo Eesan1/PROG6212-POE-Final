@@ -1,0 +1,32 @@
+@model test.Models.User
+
+<h2>Edit User</h2>
+
+<form asp-action="EditUser" method="post">
+    <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" id="name" name="Name" value="@Model.Name" />
+    </div>
+
+    <div class="form-group">
+        <label for="role">Role</label>
+        <input type="text" class="form-control" id="role" name="Role" value="@Model.Role" />
+    </div>
+
+    <div class="form-group">
+        <label for="number">Number</label>
+        <input type="text" class="form-control" id="number" name="Number" value="@Model.Number" />
+    </div>
+
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username" name="Username" value="@Model.Username" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" name="Password" value="@Model.Password" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

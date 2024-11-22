@@ -1,0 +1,158 @@
+﻿ @* @model List<test.Models.Claim>
+
+<h2>HR Dashboard</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No approved claims available.</p>
+}
+else
+{
+    <h3>Approved Claims</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Lecturer Name</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Total Claim</th>
+                <th>Notes</th>
+                <th>Supporting Document</th>
+                <th>Action</th> <!-- Add an Action column for buttons -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.LecturerName</td>
+                    <td>@claim.HoursWorked</td>
+                    <td>R @claim.HourlyRate</td>
+                    <td>R @claim.TotalClaim</td>
+                    <td>@claim.Notes</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.SupportingDocument))
+                        {
+                            <a href="@claim.SupportingDocument" target="_blank">View Document</a>
+                        }
+                        else
+                        {
+                            <span>No document</span>
+                        }
+                    </td>
+                    <td>
+                        <!-- Button to generate invoice for the specific claim -->
+                        <button onclick="location.href='@Url.Action("GenerateInvoice", "HR", new { claimId = claim.ClaimId })'" class="btn btn-primary">Generate Invoice</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+	
+
+}
+
+ 
+ *@
+
+
+ @model test.ViewModels.HRDashboardViewModel
+
+<h2>HR Dashboard</h2>
+
+@if (Model.ApprovedClaims == null || !Model.ApprovedClaims.Any())
+{
+    <p>No approved claims available.</p>
+}
+else
+{
+    <h3>Approved Claims</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Lecturer Name</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Total Claim</th>
+                <th>Notes</th>
+                <th>Supporting Document</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model.ApprovedClaims)
+            {
+                <tr>
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.LecturerName</td>
+                    <td>@claim.HoursWorked</td>
+                    <td>R @claim.HourlyRate</td>
+                    <td>R @claim.TotalClaim</td>
+                    <td>@claim.Notes</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.SupportingDocument))
+                        {
+                            <a href="@claim.SupportingDocument" target="_blank">View Document</a>
+                        }
+                        else
+                        {
+                            <span>No document</span>
+                        }
+                    </td>
+                    <td>
+                        <button onclick="location.href='@Url.Action("GenerateInvoice", "HR", new { claimId = claim.ClaimId })'" class="btn btn-primary">Generate Invoice</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<br />
+<h3>Manage Users</h3>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Number</th>
+            <th>Username</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Users == null || !Model.Users.Any())
+        {
+            <tr>
+                <td colspan="6">No users available.</td>
+            </tr>
+        }
+        else
+        {
+            @foreach (var user in Model.Users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.Name</td>
+                    <td>@user.Role</td>
+                    <td>@user.Number</td>
+                    <td>@user.Username</td>
+                    <td>
+                       
+                        <form asp-action="DeleteUser" asp-controller="HR" method="post">
+                            <input type="hidden" name="id" value="@user.Id" />
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <a asp-action="EditUser" asp-controller="HR" asp-route-id="@user.Id" class="btn btn-warning">Edit</a>
+
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

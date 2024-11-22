@@ -1,0 +1,18 @@
+@model test.Models.LoginViewModel
+
+<h2>Login</h2>
+
+<form asp-action="Login" method="post">
+    <label for="username">Username:</label>
+    <input type="text" id="username" asp-for="Username" required />
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" asp-for="Password" required />
+
+    <button type="submit">Login</button>
+</form>
+
+@if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+{
+    <div style="color:red;">@ViewBag.ErrorMessage</div>
+}

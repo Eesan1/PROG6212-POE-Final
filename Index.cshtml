@@ -1,0 +1,117 @@
+﻿@* @model List<test.Models.Claim>
+
+<h2>Claims List</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No claims available.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Lecturer Name</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Total Claim</th>
+                <th>Notes</th>
+                <th>Status</th>
+                <th>Supporting Document</th> 
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.LecturerName</td>
+                    <td>@claim.HoursWorked</td>
+                    <td>R @claim.HourlyRate</td>
+                     <td>R @claim.TotalClaim</td> 
+                    <td>@claim.Notes</td>
+                    <td>@claim.Status</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.SupportingDocument))
+                        {
+                            <a href="@claim.SupportingDocument" target="_blank">View Document</a> <!-- Link to the document -->
+                        }
+                        else
+                        {
+                            <span>No document</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+} *@
+@model List<test.Models.Claim>
+
+<h2>Claims List</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No claims available.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Claim ID</th>
+                <th>Lecturer Name</th>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Total Claim</th>
+                <th>Notes</th>
+                <th>Status</th>
+                <th>Supporting Document</th>
+                <th>Actions</th> <!-- Added actions column -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.LecturerName</td>
+                    <td>@claim.HoursWorked</td>
+                    <td>R @claim.HourlyRate</td>
+                    <td>R @claim.TotalClaim</td>
+                    <td>@claim.Notes</td>
+                    <td>@claim.Status</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.SupportingDocument))
+                        {
+                            <a href="@claim.SupportingDocument" target="_blank">View Document</a>
+                        }
+                        else
+                        {
+                            <span>No document</span>
+                        }
+                    </td>
+                    <td>
+                        @if (claim.Status == "Pending")
+                        {
+                            <form asp-action="ApproveClaim" asp-route-id="@claim.ClaimId" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken() <!-- Include CSRF Token if enabled -->
+                                <button type="submit" class="btn btn-success">Approve</button>
+                            </form>
+                            <form asp-action="RejectClaim" asp-route-id="@claim.ClaimId" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken() <!-- Include CSRF Token if enabled -->
+                                <button type="submit" class="btn btn-danger">Reject</button>
+                            </form>
+
+                        }
+                        else
+                        {
+                            <span>@claim.Status</span> <!-- Show status if not pending -->
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,185 @@
+﻿ @* @model test.Models.Claim
+
+ <h2>Lecturer Dashboard</h2>
+
+ <form enctype="multipart/form-data" asp-action="SubmitClaim" method="post">
+     <div class="form-group">
+         <label for="LecturerName">Lecturer Name</label>
+         <input type="text" id="LecturerName" name="LecturerName" class="form-control" required />
+     </div>
+
+     <div class="form-group">
+         <label for="HoursWorked">Hours Worked</label>
+         <input type="number" id="HoursWorked" name="HoursWorked" class="form-control" min="0" step="0.1" required />
+     </div>
+
+     <div class="form-group">
+         <label for="HourlyRate">Hourly Rate</label>
+         <input type="number" id="HourlyRate" name="HourlyRate" class="form-control" min="0" step="0.1" required />
+     </div>
+
+     <div class="form-group">
+         <label for="TotalClaim">Total Claim (R)</label>
+         <input type="text" id="TotalClaim" name="TotalClaim" class="form-control" readonly />
+     </div>
+
+     <div class="form-group">
+         <label for="Notes">Notes</label>
+         <textarea id="Notes" name="Notes" class="form-control"></textarea>
+     </div>
+
+     <div class="form-group">
+         <label for="SupportingDocument">Upload Supporting Document</label>
+         <input type="file" id="SupportingDocument" name="SupportingDocument" class="form-control" />
+     </div>
+
+     <button type="submit" class="btn btn-primary">Submit Claim</button>
+ </form>
+
+ <!-- JavaScript to calculate the Total Claim in real time -->
+ <script type="text/javascript">
+     const hoursWorkedInput = document.getElementById('HoursWorked');
+     const hourlyRateInput = document.getElementById('HourlyRate');
+     const totalClaimInput = document.getElementById('TotalClaim');
+
+     function calculateTotalClaim() {
+         const hoursWorked = parseFloat(hoursWorkedInput.value) || 0;
+         const hourlyRate = parseFloat(hourlyRateInput.value) || 0;
+         const totalClaim = hoursWorked * hourlyRate;
+         totalClaimInput.value = totalClaim.toFixed(2); // Show total claim with two decimal places
+     }
+
+     // Attach event listeners to recalculate the total claim in real time
+     hoursWorkedInput.addEventListener('input', calculateTotalClaim);
+     hourlyRateInput.addEventListener('input', calculateTotalClaim);
+ </script>
+ *@
+@* 
+ @model test.Models.Claim
+@{
+    var message = ViewBag.Message;
+}
+
+<h2>Submit a Claim</h2>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-success">@message</div>
+}
+
+<form asp-action="SubmitClaim" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Lecturer Name:</label>
+        <input type="text" name="LecturerName" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Hours Worked:</label>
+        <input type="number" name="HoursWorked" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Hourly Rate:</label>
+        <input type="number" name="HourlyRate" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Supporting Document:</label>
+        <input type="file" name="SupportingDocument" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Notes:</label>
+        <textarea name="Notes" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Total Claim:</label>
+        <span id="totalClaim"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit Claim</button>
+</form>
+
+<script>
+    document.querySelector("input[name='HoursWorked']").addEventListener('input', updateTotalClaim);
+    document.querySelector("input[name='HourlyRate']").addEventListener('input', updateTotalClaim);
+
+    function updateTotalClaim() {
+        const hoursWorked = parseFloat(document.querySelector("input[name='HoursWorked']").value) || 0;
+        const hourlyRate = parseFloat(document.querySelector("input[name='HourlyRate']").value) || 0;
+        const totalClaim = hoursWorked * hourlyRate;
+        document.getElementById("totalClaim").innerText = "R" + totalClaim.toFixed(2);
+    }
+</script> *@
+
+
+@model test.Models.Claim
+@{
+    var message = ViewBag.Message;
+}
+
+<h2>Submit a Claim</h2>
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div class="alert alert-success">@message</div>
+}
+<form asp-action="SubmitClaim" method="post" enctype="multipart/form-data">
+    <div>
+        <label for="LecturerName">Lecturer Name</label>
+        <input type="text" asp-for="LecturerName" class="form-control" />
+    </div>
+    <div>
+        <label for="HoursWorked">Hours Worked</label>
+        <input type="number" asp-for="HoursWorked" class="form-control" />
+    </div>
+    <div>
+        <label for="HourlyRate">Hourly Rate</label>
+        <input type="number" asp-for="HourlyRate" class="form-control" />
+    </div>
+    <div>
+        <label for="Notes">Notes</label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+    </div>
+    <div>
+        <label for="SupportingDocument">Supporting Document</label>
+        <input type="file" name="supportingDocument" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="TotalClaim">Total Claim (R)</label>
+        <!-- Total claim will be calculated in real time and displayed here -->
+        <input type="text" id="TotalClaim" name="TotalClaim" class="form-control" readonly />
+    </div>
+
+
+
+
+
+
+
+    <button type="submit" class="btn btn-primary">Submit Claim</button>
+</form>
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+    {
+        <p class="alert alert-success">@ViewBag.Message</p>
+    }
+
+
+    <br />
+
+<a href="@Url.Action("MyClaims", "Home")" class="btn btn-primary">View My Claims</a>
+
+
+
+
+
+<script>
+    // JavaScript to calculate the total claim in real time
+    document.getElementById("HoursWorked").addEventListener("input", calculateTotalClaim);
+    document.getElementById("HourlyRate").addEventListener("input", calculateTotalClaim);
+
+    function calculateTotalClaim() {
+        var hoursWorked = parseFloat(document.getElementById("HoursWorked").value) || 0;
+        var hourlyRate = parseFloat(document.getElementById("HourlyRate").value) || 0;
+        var totalClaim = hoursWorked * hourlyRate;
+
+        // Display the calculated total claim in the TotalClaim input field
+        document.getElementById("TotalClaim").value = "R " + totalClaim.toFixed(2);
+    }
+</script>
