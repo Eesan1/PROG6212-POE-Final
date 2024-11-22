@@ -5,7 +5,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using test.Models;
 using test.Data;
-using test.ViewModels; // Update to your actual namespace
+using test.ViewModels;
 
 public class HRController : Controller
 {
@@ -16,23 +16,18 @@ public class HRController : Controller
         _context = context;
     }
 
-    // HR Dashboard - Display approved claims
     public IActionResult Index()
     {
         var users = _context.Users.ToList();
 
 
-        // Fetch approved claims
         var approvedClaims = _context.Claims
             .Where(c => c.Status == "Approved")
             .ToList();
 
-        // Calculate the total amount of approved claims
         var totalAmount = approvedClaims.Sum(c => c.TotalClaim);
 
-        // Pass the data to the view
         ViewBag.TotalAmount = totalAmount;
-        // return View(approvedClaims);
 
 
         var viewModel = new HRDashboardViewModel
@@ -41,7 +36,6 @@ public class HRController : Controller
             Users = users
         };
 
-        // Pass the ViewModel to the view
         return View(viewModel);
 
 
