@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using test.Data; // Ensure this namespace is included
+using test.Data;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using test.Models;
@@ -19,120 +19,76 @@ public class HomeController : Controller
         _context = context;
     }
 
-    // GET: Welcome page
     public IActionResult Welcome()
     {
         return View(new LoginViewModel());
     }
 
-    // POST: Handle login (redirect to Index after form submission)
-    //[HttpPost]
-    //public IActionResult Login(LoginViewModel model)
-    //{
-
-    //    if (model.Role == "Academic Manager")
-    //    {
-    //        return RedirectToAction("Index"); // Show claims table for Academic Manager
-    //    }
-
-    //    if (model.Role == "Lecturer")
-    //    {
-    //        return RedirectToAction("LecturerDashboard"); // Redirect to lecturer dashboard
-    //    }
-
-
-
-    //    // Redirect to other pages for Lecturer or Programme Coordinator if needed
-    //    return View("Welcome"); // Example for other roles
-
-
-    //}
-
-    // POST: Handle login (redirect to Index after form submission)
     [HttpPost]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
-        // Validate the model state
         if (!ModelState.IsValid)
         {
-            return View("Welcome", model); // Return the welcome view with model errors
+            return View("Welcome", model); 
         }
 
-        // Fetch the user from the database
         var user = await GetUserByUsernameAsync(model.Username);
 
-        // Check if the user exists
         if (user == null)
         {
             ModelState.AddModelError("", "Invalid username or password.");
-            return View("Welcome", model); // Return the welcome view with error message
+            return View("Welcome", model); 
         }
 
-        // Check if the user is a Manager and validate password for them
         if (user.Role == "Manager")
         {
             if (!VerifyPassword(model.Password, user.Password))
             {
                 ModelState.AddModelError("", "Invalid username or password.");
-                return View("Welcome", model); // Return the welcome view with error message
+                return View("Welcome", model);
             }
 
-            // Sign in the manager
             await SignInUserAsync(user);
-            return RedirectToAction("Index"); // Redirect to manager's dashboard (Index)
+            return RedirectToAction("Index"); 
         }
 
-        // If the user is a Lecturer, skip password verification and allow login
         if (user.Role == "lecturer")
         {
-            // Sign in the lecturer without password check
             await SignInUserAsync(user);
-            return RedirectToAction("LecturerDashboard"); // Redirect to lecturer dashboard
+            return RedirectToAction("LecturerDashboard");
         }
 
-        // Check for Programme Coordinator role and sign them in
-        if (user.Role == "coordinator") // Ensure there's no space before the role
+        if (user.Role == "coordinator") 
         {
-            // Sign in the coordinator
             await SignInUserAsync(user);
-            return RedirectToAction("Index"); // Redirect to coordinator's dashboard (Index)
+            return RedirectToAction("Index"); 
         }
 
-        // Return the welcome view with error message if role doesn't match
         ModelState.AddModelError("", "Invalid user role.");
         return View("Welcome", model);
     }
-    // view lecturer claims
     public async Task<IActionResult> MyClaims()
     {
-        var username = User.Identity.Name; // Get the logged-in user's username
+        var username = User.Identity.Name; 
         var claims = await _context.Claims
                                     .Where(c => c.LecturerName == username)
-                                    .ToListAsync(); // Fetch claims where the lecturer name matches the username
+                                    .ToListAsync(); 
 
-        return View(claims); // Return the claims to the view
+        return View(claims);
     }
 
 
-
-
-
-
-
-    // verification
     public async Task<User> GetUserByUsernameAsync(string username)
     {
         return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
     }
     private bool VerifyPassword(string inputPassword, string storedPassword)
     {
-        // Implement your password verification logic here
-        // This can be a simple string comparison or hashing check based on your storage method
-        return inputPassword == storedPassword; // Adjust this logic as needed
+        return inputPassword == storedPassword;
     }
     private async Task SignInUserAsync(User user)
     {
-        // Use the fully qualified name for Claim to avoid ambiguity
+
         var claims = new List<System.Security.Claims.Claim>
     {
         new System.Security.Claims.Claim(ClaimTypes.Name, user.Username),
