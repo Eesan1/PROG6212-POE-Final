@@ -2,27 +2,24 @@
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using test.Data;  // Replace 'test' with your actual project namespace
+using test.Data; 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 
-// Add verify services
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Home/Welcome"; // Redirect here on login failure
-        options.LogoutPath = "/Home/Logout"; // Redirect here on logout
-        options.AccessDeniedPath = "/Home/AccessDenied"; // Redirect here on access denied
+        options.LoginPath = "/Home/Welcome"; 
+        options.LogoutPath = "/Home/Logout";
+        options.AccessDeniedPath = "/Home/AccessDenied";
     });
 
-// Configure the database context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-        new MySqlServerVersion(new Version(8, 0)))); // Specify the version of MySQL you are using
+        new MySqlServerVersion(new Version(8, 0)))); 
 
 
 
