@@ -7,6 +7,6 @@
 		public string Role { get; set; }
 		public string Number { get; set; }
 		public string Username { get; set; }
-		public string Password { get; set; } // Consider hashing passwords for security
+		public string Password { get; set; }
 	}
 }
