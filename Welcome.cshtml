@@ -8,7 +8,6 @@
 
     <h2>Login as:</h2>
 
-    <!-- Buttons for selecting the role -->
     <div class="role-selection">
         <button onclick="showLoginForm('Lecturer')" class="btn btn-primary">Lecturer</button>
         <button onclick="showLoginForm('Academic Manager')" class="btn btn-primary">Academic Manager</button>
@@ -17,7 +16,6 @@
 
     <hr />
 
-    <!-- Hidden login form that shows after button click -->
     <div id="loginForm" style="display:none;">
         <h3 id="roleHeading"></h3>
 
@@ -31,7 +29,6 @@
                 <input type="password" id="Password" name="Password" class="form-control" required />
             </div>
 
-            <!-- Hidden input to store the selected role -->
             <input type="hidden" id="Role" name="Role" />
 
             <button type="submit" class="btn btn-success">Login</button>
@@ -45,7 +42,7 @@
         @errorMessage
     </div>
 }
-<!-- JavaScript to display the login form when a role is selected -->
+
 <script type="text/javascript">
     function showLoginForm(role) {
         document.getElementById("roleHeading").innerText = "Login as " + role;
