@@ -10,15 +10,14 @@ using System.Threading.Tasks;
 public class AccountController : Controller
 {
    
-    private readonly ApplicationDbContext _context; // Add this line
+    private readonly ApplicationDbContext _context;
 
-    public AccountController( ApplicationDbContext context) // Modify constructor
+    public AccountController( ApplicationDbContext context)
     {
      
-        _context = context; // Initialize the context
+        _context = context; 
     }
 
-    // GET: /Account/Login
     [HttpGet]
     [AllowAnonymous]
     public IActionResult Login()
@@ -26,12 +25,11 @@ public class AccountController : Controller
         return View();
     }
 
-    // POST: /Account/Login
     [HttpPost]
     [AllowAnonymous]
     public async Task<IActionResult> Login(LoginViewModel model)
     {
-        return RedirectToAction("Welcome", "Home"); // Redirect to Welcome
+        return RedirectToAction("Welcome", "Home"); 
 
         return View(model);
     }
