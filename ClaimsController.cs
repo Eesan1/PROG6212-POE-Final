@@ -23,10 +23,4 @@ public class ClaimsController : Controller
         return View(claims);
     }
 
-
-
-
-
-
-
 }
